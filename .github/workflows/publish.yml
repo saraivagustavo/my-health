@@ -30,6 +30,6 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }} # Use o token padrão do GitHub
+          github_token: ${{ secrets.PAGES_TOKEN }} # Use o token padrão do GitHub
           publish_dir: ./dist # Pasta correta gerada pelo Vite
           publish_branch: gh-pages
