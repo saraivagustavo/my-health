@@ -1,4 +1,4 @@
-name: Deploy React App to GitHub Pages
+name: Deploy React + Vite to GitHub Pages
 
 on:
   push:
@@ -12,25 +12,40 @@ jobs:
       contents: write  # necessário para push e criar gh-pages
 
     steps:
+      # 1️⃣ Checkout do repositório
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@latest
 
+      # 2️⃣ Forçar Node 25 para todas as Actions JS
+      - name: Force Node 25 for JS actions
+        run: echo "FORCE_JAVASCRIPT_ACTIONS_TO_NODE25=true" >> $GITHUB_ENV
+
+      # 3️⃣ Configurar Node.js para o projeto
       - name: Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@latest
         with:
-          node-version: '24'
+          node-version: '25'
 
-      - name: Force Node 24 for JS actions
-        run: echo "FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true" >> $GITHUB_ENV
+      # 4️⃣ Cache das dependências do npm
+      - name: Cache npm
+        uses: actions/cache@latest
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
+      # 5️⃣ Instalar dependências
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
+      # 6️⃣ Build do React + Vite
       - name: Build React app
         run: npm run build
 
+      # 7️⃣ Deploy para GitHub Pages
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+        uses: peaceiris/actions-gh-pages@latest
         with:
           github_token: ${{ secrets.PAGES_TOKEN }}
           publish_dir: ./build
