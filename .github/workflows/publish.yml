@@ -27,9 +27,12 @@ jobs:
       - name: Build React app
         run: npm run build
 
+      - name: Check build output
+        run: ls -R ./dist
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.PAGEREACT_TOKEN }} # Use o token padrão do GitHub
+          personal_token: ${{ secrets.PAGEREACT_TOKEN }} # Use o token padrão do GitHub
           publish_dir: ./dist # Pasta correta gerada pelo Vite
           publish_branch: gh-pages
