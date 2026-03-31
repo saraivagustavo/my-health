@@ -9,26 +9,26 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # necessário para push e criar gh-pages
+      contents: write
 
     steps:
       # 1️⃣ Checkout do repositório
       - name: Checkout repository
-        uses: actions/checkout@latest
+        uses: actions/checkout@v5
 
-      # 2️⃣ Forçar Node 25 para todas as Actions JS
-      - name: Force Node 25 for JS actions
+      # 2️⃣ Forçar Node 24 para Actions JS
+      - name: Force Node 24 for JS actions
         run: echo "FORCE_JAVASCRIPT_ACTIONS_TO_NODE25=true" >> $GITHUB_ENV
 
-      # 3️⃣ Configurar Node.js para o projeto
+      # 3️⃣ Configurar Node.js
       - name: Setup Node.js
-        uses: actions/setup-node@latest
+        uses: actions/setup-node@v5
         with:
           node-version: '25'
 
-      # 4️⃣ Cache das dependências do npm
+      # 4️⃣ Cache das dependências npm
       - name: Cache npm
-        uses: actions/cache@latest
+        uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
@@ -45,8 +45,8 @@ jobs:
 
       # 7️⃣ Deploy para GitHub Pages
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@latest
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.PAGES_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build
           publish_branch: gh-pages
