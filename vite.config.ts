@@ -6,6 +6,7 @@ import path from 'path/win32'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/my-health/',
   plugins: [
     react(),
     babel({ presets: [reactCompilerPreset()] })

@@ -12,41 +12,24 @@ jobs:
       contents: write
 
     steps:
-      # 1️⃣ Checkout do repositório
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
-      # 2️⃣ Forçar Node 24 para Actions JS
-      - name: Force Node 24 for JS actions
-        run: echo "FORCE_JAVASCRIPT_ACTIONS_TO_NODE25=true" >> $GITHUB_ENV
-
-      # 3️⃣ Configurar Node.js
       - name: Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v4
         with:
-          node-version: '25'
+          node-version: '20' # Versão estável recomendada
+          cache: 'npm'
 
-      # 4️⃣ Cache das dependências npm
-      - name: Cache npm
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      # 5️⃣ Instalar dependências
       - name: Install dependencies
         run: npm ci
 
-      # 6️⃣ Build do React + Vite
       - name: Build React app
         run: npm run build
 
-      # 7️⃣ Deploy para GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.PAGES_TOKEN }}
-          publish_dir: ./build
+          github_token: ${{ secrets.GITHUB_TOKEN }} # Use o token padrão do GitHub
+          publish_dir: ./dist # Pasta correta gerada pelo Vite
           publish_branch: gh-pages
