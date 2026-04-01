@@ -9,9 +9,8 @@ export default defineConfig({
   base: '/my-health/',
   plugins: [
     react(),
-    babel({ presets: [reactCompilerPreset(),
-    tsconfigPaths()
-    ] })
+    tsconfigPaths(),
+    babel({ presets: [reactCompilerPreset()] })
   ],
   resolve: {
     alias: {
